@@ -1,0 +1,7 @@
+rm -rf wxwork.zip && \
+zip -r wxwork.zip . \
+-x ".git/*" -x "logs/*" -x "tmp/*" -x "main" -x "wxwork" -x "scripts/deploy/*" \
+-x ".idea/*" -x "*/.DS_Store" -x ".byebug_history" -x ".gitignore" \
+
+scp -P port -r wxwork.zip user@host:/path/wxwork.zip;
+ssh -p port user@host -C "/bin/bash -s" < ./scripts/restart/test.sh

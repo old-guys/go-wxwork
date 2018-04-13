@@ -1,0 +1,53 @@
+<div><a href="javascript:;" id="test">拍照或从手机相册中选图接口测试0</a></div>
+<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript">
+    var appId = "{{ .wxJsapiConfig.appId }}";
+    var nonceStr = "{{ .wxJsapiConfig.nonceStr }}";
+    var timeStamp = "{{ .wxJsapiConfig.timestamp }}";
+    var signature = "{{ .wxJsapiConfig.signature }}";
+    var jsApiList = [
+        'onMenuShareAppMessage', 'onMenuShareWechat', 'startRecord', 'stopRecord', 'onVoiceRecordEnd',
+        'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice',
+        'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation',
+        'getLocation','hideOptionMenu', 'showOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem', 'closeWindow', 'scanQRCode'
+    ];
+
+    var configParams = {
+        // beta: true,
+        // debug: true,
+        appId: appId,
+        timestamp: timeStamp,
+        nonceStr: nonceStr,
+        signature: signature,
+        jsApiList: jsApiList
+    };
+
+    window.imageFileAcceptExtensions = '*';
+
+    $(function () {
+        wx.config(configParams);
+
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+            wx.hideMenuItems({
+                menuList: ['menuItem:openWithSafari']
+            });
+
+            wx.error(function (res) {
+                alert(JSON.stringify(res));
+            });
+        });
+
+        $('#test').on("click", function() {
+            wx.chooseImage({
+                count: 1,
+                sizeType: ['original', 'compressed'],
+                sourceType: ['album', 'camera'],
+                success: function (res) {
+                    alert(JSON.stringify(res))
+                }
+            });
+        });
+    });
+</script>

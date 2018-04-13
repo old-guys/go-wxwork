@@ -1,0 +1,8 @@
+[dev]
+default_database_aliasName = "default"
+default_database_driverName = "mysql"
+default_database_dataSource = "root@tcp(127.0.0.1:3306)/wxwork?charset=utf8&parseTime=True"
+default_database_maxIdle = 30
+default_database_maxConn = 30
+[test]
+[prod]

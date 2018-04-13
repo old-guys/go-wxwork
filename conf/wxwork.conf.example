@@ -1,0 +1,15 @@
+wxwork_qyapi_host = "https://qyapi.weixin.qq.com"
+wxwork_open_host = "https://open.weixin.qq.com"
+
+[dev]
+wxwork_key = "xxxx"
+wxwork_token = "xxxx"
+wxwork_aes_key = "xxxx"
+[test]
+wxwork_key = "xxxx"
+wxwork_token = "xxxx"
+wxwork_aes_key = "xxxx"
+[prod]
+wxwork_key = "xxxx"
+wxwork_token = "xxxx"
+wxwork_aes_key = "xxxx"

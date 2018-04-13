@@ -1,0 +1,16 @@
+appname = wxwork
+httpaddr = localhost
+
+[dev]
+runmode = test
+httpport = 7510
+[test]
+runmode = test
+httpport = 7510
+[prod]
+runmode = prod
+httpport = 3008
+
+include "wxwork.conf"
+include "database.conf"
+include "redis.conf"

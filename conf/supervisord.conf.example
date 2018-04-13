@@ -1,0 +1,10 @@
+[program:wxwork]
+directory=/path/go/src/wxwork
+command=/path/go/src/wxwork/wxwork
+autostart=true
+user=lihui
+redirect_stderr=true
+stdout_logfile =/path/go/src/wxwork/supervisord.log
+
+[supervisord]
+[supervisorctl]

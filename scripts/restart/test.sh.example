@@ -1,0 +1,18 @@
+unzip -o /path/go/src/wxwork.zip -d /path/go/src/wxwork;
+
+cd /path/wxwork;
+
+go build -o wxwork main.go;
+go build -o wxwork_worker worker.go;
+
+kill -9 `cat /path/go/src/wxwork/tmp/pids/server.pid`;
+kill -9 `cat /path/go/src/wxwork/tmp/pids/worker.pid`;
+
+nohup ./wxwork >> logs/test.log 2>&1 &
+nohup ./wxwork_worker -queues="myqueue" >> logs/worker.log 2>&1 &
+
+sleep 10s;
+
+# nohup bee run -runmode=test >> logs/test.log 2>&1 &
+# ps aux|grep wxwork|awk '{print $2}'|xargs kill -9
+# kill -HUP `cat tmp/pids/server.pid`
