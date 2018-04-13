@@ -18,6 +18,8 @@
 ### compile && run
  	go build -o wxwork main.go
 	go build -o wxwork_worker worker.go
-	
+	./wxwork
+	./wxwork_worker -queues="myqueue"
+
 ### deploy
 	source scripts/deploy/test.sh
