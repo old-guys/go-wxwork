@@ -3,9 +3,9 @@
 /tmp
 /scripts/deploy/test.sh
 /scripts/restart/test.sh
-worker
-wxwork
-wxwork_worker
+/worker
+/wxwork
+/wxwork_worker
 wxwork.zip
 
 # Ignore all swap files
