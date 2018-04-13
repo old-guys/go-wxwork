@@ -12,8 +12,7 @@ func changeContact(queue string, args ...interface{}) error {
 	lib_wxwork.Logger.Info(queue, args)
 
 	id := args[0]
-	userid := args[1].(map[string]interface{})["UserID"].(string)
-
+	data := args[1].(map[string]interface{})
 	wxOrg := models.WxworkOrg{}
 	wxworkOrgMap := wxOrg.WxworkOrgMap
 	org := models.Org{}
@@ -26,7 +25,7 @@ func changeContact(queue string, args ...interface{}) error {
 	service.WxworkOrg = wxOrg
 	service.Org = org
 
-	service.UpdateUser(userid, map[string]interface{}{})
+	service.EventListener(data)
 
 
 	return nil

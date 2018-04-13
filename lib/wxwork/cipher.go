@@ -38,10 +38,46 @@ type msgXml struct {
 	FromUserName string `xml:"FromUserName"`
 	CreateTime   string `xml:"CreateTime"`
 	MsgType      string `xml:"MsgType"`
-	Event        string `xml:"Event"`
+
 	AgentID      string `xml:"AgentID"`
+
+	Event        string `xml:"Event"`
+	EventKey     string `xml:"EventKey"`
+
+	Latitude     string `xml:"Latitude"`
+	Longitude    string `xml:"Longitude"`
+	Precision    string `xml:"Precision"`
+
+	JobId        string `xml:"JobId"`
+	JobType      string `xml:"JobType"`
+	ErrCode      string `xml:"ErrCode"`
+	ErrMsg       string `xml:"ErrMsg"`
+
 	ChangeType   string `xml:"ChangeType"`
 	UserID       string `xml:"UserID"`
+	NewUserID    string `xml:"NewUserID"`
+	Name         string `xml:"Name"`
+	Department   string `xml:"Department"`
+	Mobile       string `xml:"Mobile"`
+	Position     string `xml:"Position"`
+	Gender       string `xml:"Gender"`
+	Email        string `xml:"Email"`
+	Status       string `xml:"Status"`
+	Avatar       string `xml:"Avatar"`
+	EnglishName  string `xml:"EnglishName"`
+	IsLeader     string `xml:"IsLeader"`
+	Telephone    string `xml:"Telephone"`
+	//ExtAttr
+
+	Id           string `xml:"Id"`
+	ParentId     string `xml:"ParentId"`
+	Order        string `xml:"Order"`
+
+	TagId         string `xml:"TagId"`
+	AddUserItems  string `xml:"AddUserItems"`
+	DelUserItems  string `xml:"DelUserItems"`
+	AddPartyItems string `xml:"AddPartyItems"`
+	DelPartyItems string `xml:"DelPartyItems"`
 }
 
 func (c *Config) Decrypt(args map[string]interface{}) (decrypted_data interface{}, err error) {

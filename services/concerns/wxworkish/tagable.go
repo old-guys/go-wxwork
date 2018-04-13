@@ -1,5 +1,11 @@
 package services_concerns_wxworkish
 
+import (
+	"wxwork/models"
+	"strings"
+	"strconv"
+)
+
 func (c *Base) TagAllUser(tagId int, userList *[]interface{}, more bool, refresh bool) {
 	userData := c.GetUsersByTag(tagId)
 	if userData["errcode"] == nil || userData["errcode"].(float64) != 0 {
@@ -56,3 +62,47 @@ func (c *Base) TagsAllUsers(v interface{}, userList *[]interface{}, more bool, r
 
 	return *userList
 }
+
+func (c *Base) UpdateTag(data map[string]interface{}) {
+	tagId, _ := strconv.Atoi(data["TagId"].(string))
+	addUserItems := data["AddUserItems"].(string)
+	delUserItems := data["DelUserItems"].(string)
+
+	useridStr := ""
+	if addUserItems != "" { useridStr = addUserItems }
+	if delUserItems != "" { useridStr = delUserItems }
+
+	userids := strings.Split(useridStr, ",")
+
+	if addUserItems != "" { c.addUserItems(tagId, userids) }
+	if delUserItems != "" { c.delUserItems(tagId, userids) }
+
+	c.updateTagByWxUsers(userids)
+}
+
+func (c *Base) addUserItems(tagId int, userids []string) {
+	if len(userids) == 0 { return }
+
+	for _, userid := range userids {
+		wutm := models.WxworkUserTagMap{WxworkOrgID: c.WxworkOrg.Id, Userid: userid, TagId: tagId}
+		models.WxworkUserTagMapAr.Where(&wutm).FirstOrInit(&wutm)
+		models.WxworkUserTagMapAr.Save(&wutm)
+	}
+}
+
+func (c *Base) delUserItems(tagId int, userids []string) {
+	if len(userids) == 0 { return }
+
+	wutm := models.WxworkUserTagMap{WxworkOrgID: c.WxworkOrg.Id, TagId: tagId}
+	models.WxworkUserTagMapAr.Where(&wutm).Delete(&wutm, "userid IN (?)", userids)
+}
+
+func (c *Base) updateTagByWxUsers(userids []string) {
+	if len(userids) == 0 { return }
+
+	for _, userid := range userids {
+		c.UpdateUser(userid, map[string]interface{}{})
+	}
+}
+
+

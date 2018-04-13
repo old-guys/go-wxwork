@@ -53,45 +53,26 @@ func (c *OrgService) MsgTypeListener(data interface{}) string {
 
 	switch msgType {
 		case "event":
-			result = c.eventListener(mapData)
-		case "text":
-		case "image":
-		case "voice":
-		case "video":
-		case "location":
-		case "link":
+			c.addChangeContactQueue(mapData)
 	}
 
 	lib_wxwork.Logger.Info("Wxwork org === Send data to Wxwork:", result)
 	return result
 }
 
-func (c *OrgService) eventListener(data map[string]interface{}) string {
+func (c *OrgService) EventListener(data map[string]interface{}) string {
 	event := data["Event"]
-	result := ""
+	result := "success"
 
 	switch event {
-		case "subscribe":
-		case "unsubscribe":
-		case "enter_agent":
-		case "LOCATION":
-		case "batch_job_result":
 		case "change_contact":
 			c.changeContact(data)
-		case "click":
-		case "view":
-		case "scancode_push":
-		case "scancode_waitmsg":
-		case "pic_sysphoto":
-		case "pic_photo_or_album":
-		case "pic_weixin":
-		case "location_select":
 	}
 
 	return result
 }
 
-func (c *OrgService) changeContact(data map[string]interface{})  {
+func (c *OrgService) addChangeContactQueue(data map[string]interface{}) {
 	goworker.Enqueue(&goworker.Job{
 		Queue: "myqueue",
 		Payload: goworker.Payload{
@@ -99,4 +80,55 @@ func (c *OrgService) changeContact(data map[string]interface{})  {
 			Args: []interface{}{c.WxworkOrg.Id, data},
 		},
 	})
+}
+
+func (c *OrgService) changeContact(data map[string]interface{}) {
+	changeType := data["ChangeType"]
+
+	switch changeType {
+		case "create_user", "update_user":
+			c.updateUsersHandle(data)
+		case "delete_user":
+			c.deleteUsersHandle(data)
+		case "create_party", "update_party":
+			c.updateDeptsHandle(data)
+		case "delete_party":
+			c.deleteDeptsHandle(data)
+		case "update_tag":
+			c.updateTagsHandle(data)
+	}
+
+}
+
+func (c *OrgService) updateUsersHandle(data map[string]interface{}) {
+	userid := data["UserID"].(string)
+	newUserid, ok := data["NewUserID"].(string)
+
+	if ok {
+		models.WxworkUserAr.
+			Where(models.WxworkUser{WxworkOrgID: c.WxworkOrg.Id}).
+			Where("userid = ?", userid).
+			Updates(models.WxworkUser{Userid: newUserid})
+	}
+
+	c.UpdateUser(userid, map[string]interface{}{})
+}
+
+func (c *OrgService) deleteUsersHandle(data map[string]interface{}) {
+	userid := data["UserID"]
+	c.DeleteUser(userid)
+}
+
+func (c *OrgService) updateDeptsHandle(data map[string]interface{}) {
+	deptId := data["Id"]
+	c.UpdateDepartment(deptId)
+}
+
+func (c *OrgService) deleteDeptsHandle(data map[string]interface{}) {
+	deptId := data["Id"]
+	c.DeleteDepartment(deptId)
+}
+
+func (c *OrgService) updateTagsHandle(data map[string]interface{}) {
+	c.UpdateTag(data)
 }
